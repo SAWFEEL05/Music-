@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Downloader</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Download Music from YouTube</h1>
+        <form id="download-form" action="/download" method="POST">
+            <input type="text" id="url" name="url" placeholder="Enter YouTube URL" required>
+            <button type="submit">Download</button>
+        </form>
+
+        <div id="message"></div>
+    </div>
+
+    <script>
+        // Handle form submission
+        document.getElementById("download-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            var url = document.getElementById("url").value;
+            var formData = new FormData();
+            formData.append("url", url);
+
+            // Send the POST request to the server
+            fetch("/download", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("message").innerHTML = data.message;
+            })
+            .catch(error => {
+                document.getElementById("message").innerHTML = "An error occurred: " + error;
+            });
+        });
+    </script>
+</body>
+</html>
